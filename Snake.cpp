@@ -3,7 +3,7 @@
 #include <string>
 #include <ctime>
 #include <SDL.h>
-#include <SDL_ttf.h> // SDL library used to display text with the renderer
+#include <SDL_ttf.h> 
 using namespace std;
 
 void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int scale, vector<int> tailX, vector<int> tailY, int tailLength) {
@@ -15,7 +15,7 @@ void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int sca
 
 	SDL_RenderFillRect(renderer, &player);
 
-	// Gets x and y of all tail blocks and renders them
+	// Vẽ phần thân rắn
 	for (int i = 0; i < tailLength; i++) {
 		player.x = tailX[i];
 		player.y = tailY[i];
@@ -32,14 +32,12 @@ void renderFood(SDL_Renderer* renderer, SDL_Rect food) {
 
 void renderScore(SDL_Renderer* renderer, int tailLength, int scale, int wScale) {
 	SDL_Color Black = { 0, 0, 0 };
-
-	// Get the font used for displaying text
 	TTF_Font* font = TTF_OpenFont((char*)"arial.ttf", 200);
 	if (font == NULL) {
 		cout << "Font loading error" << endl;
 		return;
 	}
-	// print word to the screen
+	// In chữ
 	SDL_Surface* score = TTF_RenderText_Solid(font, /*doi thanh dang con trỏ */(string("Score: ") + to_string(tailLength * 10)).c_str(), Black);
 	SDL_Texture* scoreMessage = SDL_CreateTextureFromSurface(renderer, score);
 
@@ -62,7 +60,7 @@ bool checkCollision(int foodx, int foody, int playerx, int playery) {
 	return false;
 }
 
-// Get a valid spawn for the food which is not on top of a tail or player block
+// Tạo vị trí food, kiểm tra xem có bị trùng với tọa độ đầu hay thân rắn
 pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, int playerY, int scale, int wScale, int tailLength) {
 	bool valid = false;
 	int x = 0;
@@ -72,7 +70,6 @@ pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, i
 	y = scale * (rand() % wScale); // food position
 	valid = true;
 
-	// Check all tail blocks and player block
 	for (int i = 0; i < tailLength; i++) {
 
 		if ((x == tailX[i] && y == tailY[i]) || (x == playerX && y == playerY)) {
@@ -96,8 +93,6 @@ void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, in
 	SDL_Color Red = { 255, 0, 0 };
 	SDL_Color White = { 255, 255, 255 };
 	SDL_Color Black = { 0, 0, 0 };
-
-	// Get the font used for displaying text
 	TTF_Font* font = TTF_OpenFont((char*)"arial.ttf", 10);
 	if (font == NULL) {
 		cout << "Font loading error" << endl;
@@ -136,8 +131,6 @@ void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, in
 	SDL_RenderCopy(renderer, scoreMessage, NULL, &scoreRect);
 
 	TTF_CloseFont(font);
-
-	// Show game over screen while space has not been pressed
 	while (true) {
 		SDL_RenderPresent(renderer);
 
@@ -156,7 +149,7 @@ void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, in
 	}
 
 }
-//Win the game
+//Khi chiến thắng
 void youWin(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, int tailLength) {
 	SDL_Color Red = { 255, 0, 0 };
 	SDL_Color White = { 255, 255, 255 };
@@ -200,8 +193,7 @@ void youWin(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, int 
 	SDL_RenderCopy(renderer, scoreMessage, NULL, &scoreRect);
 
 	TTF_CloseFont(font);
-
-	// Show victory screen while space has not been pressed
+	
 	while (true) {
 		SDL_RenderPresent(renderer);
 
@@ -227,7 +219,6 @@ int main(int argc, char* argv[]) {
 		cout << "Error: " << TTF_GetError() << endl;
 	}
 
-	//Initial variable used for the whole program
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Event event;
@@ -240,21 +231,20 @@ int main(int argc, char* argv[]) {
 
 	int tailLength = 0;
 
-	// Vectors for storage of tail block positions
 	vector<int> tailX;
 	vector<int> tailY;
 
-	// Size of tiles
+	// Kích thước của đuôi
 	int scale = 24;
 	int wScale = 24;
 
-	// Player position variables
+	// Vị trí ban đầu của cái đầu
 	int x = 0;
 	int y = 0;
 	int prevX = 0;
 	int prevY = 0;
 
-	// Food rectangle
+	// Vị trí thức ăn
 	SDL_Rect food;
 	food.w = scale;
 	food.h = scale;
@@ -265,12 +255,11 @@ int main(int argc, char* argv[]) {
 	food.x = foodLoc.first;
 	food.y = foodLoc.second;
 
-	// Show the window with these settings and apply a renderer to it
 	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale + 1, scale * wScale + 1, SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 	float time = SDL_GetTicks() / 100;
-	// Movement controls
+	// Di chuyển
 	bool up = false;
 	bool down = false;
 	bool right = false;
@@ -283,10 +272,8 @@ int main(int argc, char* argv[]) {
 		float newTime = SDL_GetTicks() / 75; //Speed at which the blocks are updated
 		float delta = newTime - time;
 		time = newTime;
-
-		//inputThisFrame = false;
-
-		// Check win condition
+		
+		//kiểm tra xem đã thắng hay chưa
 		if (tailLength >= 5) {
 			youWin(renderer, event, scale, wScale, tailLength);
 			x = 0;
@@ -302,15 +289,13 @@ int main(int argc, char* argv[]) {
 
 		}
 
-		// Controls
+		// Điều khiển
 		if (SDL_PollEvent(&event)) {
-
-			//Exit the program
 			if (event.type == SDL_QUIT) {
 				exit(0);
 			}
 
-			// If a key is pressed
+			// Kiểm tra phím nhập vào
 			if (event.type == SDL_KEYDOWN) {
 
 				if (down == false && event.key.keysym.scancode == SDL_SCANCODE_UP) {
@@ -346,7 +331,7 @@ int main(int argc, char* argv[]) {
 
 		}
 
-		// The previous position of the player block
+		// tọa độ cũ của đầu
 		prevX = x;
 		prevY = y;
 
@@ -376,10 +361,10 @@ int main(int argc, char* argv[]) {
 
 		}
 
-		// Collision detection
+		// KIểm tra va chạm
 		if (checkCollision(food.x, food.y, x, y)) {
 
-			// Spawn new food after it has been eaten
+			//Tạo thức ăn sau khi ăn
 			foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
 			food.x = foodLoc.first;
 			food.y = foodLoc.second;
@@ -390,8 +375,7 @@ int main(int argc, char* argv[]) {
 
 			tailLength++;
 		}
-
-		// Only runs in the frames where the player block has moved
+		
 		if (delta * scale == 24) {
 
 			// Update tail size and position
@@ -400,7 +384,7 @@ int main(int argc, char* argv[]) {
 				tailY.push_back(prevY);
 			}
 
-			//Loop through every tail block, move all blocks to the nearest block in front
+			//cập nhật lại tọa độ của đầu và thân rắn
 			for (int i = 0; i < tailLength; i++) {
 
 				if (i > 0) {
@@ -415,7 +399,7 @@ int main(int argc, char* argv[]) {
 
 		}
 
-		// Game over if player has collided with a tail block, also reset everything
+		// Game kết thúc sau khi đầu chạm vào một trong các vị trí của thân rắn
 		for (int i = 0; i < tailLength; i++) {
 
 			if (x == tailX[i] && y == tailY[i]) {
@@ -434,7 +418,7 @@ int main(int argc, char* argv[]) {
 
 		}
 
-		// Game over if player out of bounds, also resets the game state
+		// game kết thúc khi rắn chạm vào tường
 		if (x < 0 || y < 0 || x > scale * wScale - scale || y > scale * wScale - scale) {
 			gameOver(renderer, event, scale, wScale, tailLength);
 			x = 0;
@@ -449,7 +433,7 @@ int main(int argc, char* argv[]) {
 			redo = false;
 		}
 
-		// Render everything
+		// Render mọi thứ
 
 		renderFood(renderer, food);
 		renderPlayer(renderer, player, x, y, scale, tailX, tailY, tailLength);
@@ -460,12 +444,7 @@ int main(int argc, char* argv[]) {
 		SDL_RenderDrawLine(renderer, 24 * 24, 24 * 24, 24 * 24, 0);
 		SDL_RenderDrawLine(renderer, 24 * 24, 0, 0, 0);
 
-		// Put everything on screen
 		SDL_RenderPresent(renderer);
-		//SDL_Delay(24);
-
-		// Choose a color and fill the entire window with it, resets everything before the next frame
-		// Background color
 		SDL_SetRenderDrawColor(renderer, 105, 105, 105, 255);
 		SDL_RenderClear(renderer);
 
