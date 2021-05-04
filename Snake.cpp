@@ -66,8 +66,8 @@ pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, i
 	int x = 0;
 	int y = 0;
 	srand(time(0));
-	x = scale * (rand() % wScale); // food position
-	y = scale * (rand() % wScale); // food position
+	x = scale * (rand() % wScale); // vị trí thức ăn
+	y = scale * (rand() % wScale); // vị trí thức ăn
 	valid = true;
 
 	for (int i = 0; i < tailLength; i++) {
