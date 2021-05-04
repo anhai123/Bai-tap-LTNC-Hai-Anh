@@ -15,4 +15,6 @@ Hướng làm:
 - Tọa độ hóa các đối tượng là rắn và thức ăn sao cho chúng có tọa độ hay đổi,
 - Mỗi khí tọa độ của đầu rắn trùng với tọa độ thức ăn thì độ dài mảng sẽ tăng
 
--Về điểm thì em tự nhận được 6.5 ạ.
+-Về điểm thì em tự nhận được 6 đến 6.5 ạ.
+
+-Em có tham khảo video trên youtube https://www.youtube.com/watch?v=AaGK-fj-BAM và lazyfoo và thư viện chữ 
