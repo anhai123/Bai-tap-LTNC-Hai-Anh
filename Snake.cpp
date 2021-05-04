@@ -267,7 +267,7 @@ int main(int argc, char* argv[]) {
 	
 	bool redo = false;
 	while (true) {
-		float newTime = SDL_GetTicks() / 75; //Speed at which the blocks are updated
+		float newTime = SDL_GetTicks() / 75;
 		float delta = newTime - time;
 		time = newTime;
 		
@@ -375,8 +375,6 @@ int main(int argc, char* argv[]) {
 		}
 		
 		if (delta * scale == 24) {
-
-			// Update tail size and position
 			if (tailX.size() != tailLength) {
 				tailX.push_back(prevX);
 				tailY.push_back(prevY);
