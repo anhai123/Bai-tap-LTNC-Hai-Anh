@@ -264,10 +264,8 @@ int main(int argc, char* argv[]) {
 	bool down = false;
 	bool right = false;
 	bool left = false;
-
-	//bool inputThisFrame = false;
+	
 	bool redo = false;
-
 	while (true) {
 		float newTime = SDL_GetTicks() / 75; //Speed at which the blocks are updated
 		float delta = newTime - time;
